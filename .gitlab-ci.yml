@@ -1,0 +1,31 @@
+image: openjdk:21-jdk
+
+before_script:
+  - apt-get update && apt-get install -y maven
+  - mvn --version
+
+stages:
+  - build
+  - test
+
+build:
+  stage: build
+  only:
+    - main
+  script:
+    - 'echo "Начинается этап сборки"'
+    - 'mvn compile'
+  cache:
+    paths:
+      - target/
+
+test:
+  stage: test
+  only:
+    - main
+  script:
+    - 'echo "Начинается этап тестирования"'
+    - 'mvn test'
+  cache:
+    paths:
+      - target/
