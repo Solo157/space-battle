@@ -1,13 +1,17 @@
 package com.space.command;
 
-import com.space.exception.exception.TowTimesRepeatICommandException;
-
 public class RetryCommandTwoTime implements ICommand {
 
     private ICommand iCommand;
     private int executeFailCount;
+    private final LogExceptionCommand logExceptionCommand ;
 
-    public RetryCommandTwoTime() {
+    public RetryCommandTwoTime(LogExceptionCommand logExceptionCommand) {
+        this.logExceptionCommand = logExceptionCommand;
+    }
+
+    public LogExceptionCommand getLogExceptionCommand() {
+        return logExceptionCommand;
     }
 
     public void setCommand(ICommand command) {
@@ -24,7 +28,8 @@ public class RetryCommandTwoTime implements ICommand {
                 repeat = false;
             } catch (Exception e) {
                 if (++executeFailCount == 2) {
-                    throw new TowTimesRepeatICommandException(e.getMessage());
+                    logExceptionCommand.execute();
+                    repeat = false;
                 }
             }
         }

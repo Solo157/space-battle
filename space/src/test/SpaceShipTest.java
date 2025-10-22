@@ -14,16 +14,6 @@ import static org.mockito.Mockito.verify;
 
 public class SpaceShipTest {
 
-    void setUp() {
-//        ExceptionHandler.register(Move.class.toString(), NullPointerException.class.toString(), new NullPointerExceptionHandler());
-
-//        BiFunction<ICommand, Exception, ICommand> biFuncForIncorrectArgException = (cmd, e) -> {
-//            cmd.getObject().setPosition(new Point(12, 5));
-//            return cmd;
-//        };
-//        ExceptionHandler.register(Move.class.toString(), IncorrectArgumentException.class.toString(), biFuncForIncorrectArgException);
-    }
-
     /**
      * Для объекта, находящегося в точке (12, 5) и движущегося со скоростью (-7, 3)
      * движение меняет положение объекта на (5, 8).
@@ -97,70 +87,15 @@ public class SpaceShipTest {
         assertThrows(RuntimeException.class, move::execute);
     }
 
-
-//    /**
-//     * Попытка сдвинуть объект, у которого невозможно изменить положение в пространстве, приводит к ошибке.
-//     */
-//    @Test
-//    public void executeMove_objectIsStatic_successfully2() {
-//        setUp();
-//
-//        // when
-//        SpaceShip spaceShip = new SpaceShip();
-//        spaceShip.setProperty("velocity", new Vector(-7, 3));
-//        spaceShip.setProperty("location", new Point(12, 5));
-//        spaceShip.setProperty("static", Boolean.TRUE);
-//
-//        MovingObjectAdapter movingObjectAdapter = new MovingObjectAdapter(spaceShip);
-//
-//        // do
-//        ICommand move = new Move(movingObjectAdapter);
-//
-//        try {
-//            move.execute();
-//        } catch (Exception e) {
-//            ExceptionHandler.handle(move, e).execute();
-//        }
-//
-//        assertFalse((Boolean) spaceShip.getProperty("static"));
-//    }
-//
-//    /**
-//     * Попытка сдвинуть объект, у которого невозможно изменить положение в пространстве, приводит к ошибке.
-//     */
-//    @Test
-//    public void executeMove_objectIsStatic_successfully3() {
-//        setUp();
-//
-//        // when
-//        SpaceShip spaceShip = new SpaceShip();
-//        spaceShip.setProperty("velocity", new Vector(-7, 3));
-//        spaceShip.setProperty("static", Boolean.FALSE);
-//
-//        MovingObjectAdapter movingObjectAdapter = new MovingObjectAdapter(spaceShip);
-//
-//        // do
-//        ICommand move = new Move(movingObjectAdapter);
-//
-//        try {
-//            move.execute();
-//        } catch (Exception e) {
-//            ExceptionHandler.handle(move, e).execute();
-//        }
-//
-//        assertEquals(5, ((Point)spaceShip.getProperty("location")).getX());
-//        assertEquals(8, ((Point)spaceShip.getProperty("location")).getY());
-//    }
-
     /**
-     * Попытка сдвинуть объект, у которого невозможно изменить положение в пространстве, приводит к ошибке.
+     * Тест, проверяющий, что при исключении NPE происходит повторная отправка команды и при неуспешной - запись в лог.
      */
     @Test
-    public void executeMove_objectIsStatic_successfully3() {
+    public void executeMove_repeatCommandOneTime_successfully() {
         // when
         LogExceptionCommand mockLogExceptionCommand = Mockito.spy(LogExceptionCommand.class);
-        RetryCommandOneTime retryCommandOneTime = new RetryCommandOneTime();
-        MoveNullPointerExceptionHandler moveNullPointerExceptionHandler = new MoveNullPointerExceptionHandler(mockLogExceptionCommand, retryCommandOneTime);
+        RetryCommandOneTime retryCommandOneTime = new RetryCommandOneTime(mockLogExceptionCommand);
+        MoveNullPointerExceptionHandler moveNullPointerExceptionHandler = new MoveNullPointerExceptionHandler(retryCommandOneTime);
 
         ExceptionHandler.register(
                 Move.class.toString(),
@@ -174,7 +109,7 @@ public class SpaceShipTest {
         try {
             move.execute();
         } catch (Exception e) {
-            ExceptionHandler.handle(move, e);
+            ExceptionHandler.handle(move, e).execute();
         }
 
         // assert
@@ -183,14 +118,15 @@ public class SpaceShipTest {
     }
 
     /**
-     * Попытка сдвинуть объект, у которого невозможно изменить положение в пространстве, приводит к ошибке.
+     * Тест, проверяющий, что при исключении StaticObjectException происходит две попытки выполнить команду
+     * и после двух неуспешных - запись в лог.
      */
     @Test
-    public void executeMove_objectIsStatic_successfully4() {
+    public void executeMove_repeatCommandTwoTimes_successfully() {
         // when
         LogExceptionCommand mockLogExceptionCommand = Mockito.spy(LogExceptionCommand.class);
-        RetryCommandTwoTime retryCommandTwoTime = new RetryCommandTwoTime();
-        MoveStaticObjectExceptionHandler moveStaticObjectExceptionHandler = new MoveStaticObjectExceptionHandler(mockLogExceptionCommand, retryCommandTwoTime);
+        RetryCommandTwoTime retryCommandTwoTime = new RetryCommandTwoTime(mockLogExceptionCommand);
+        MoveStaticObjectExceptionHandler moveStaticObjectExceptionHandler = new MoveStaticObjectExceptionHandler(retryCommandTwoTime);
 
         ExceptionHandler.register(
                 Move.class.toString(),
@@ -206,7 +142,7 @@ public class SpaceShipTest {
         try {
             move.execute();
         } catch (Exception e) {
-            ExceptionHandler.handle(move, e);
+            ExceptionHandler.handle(move, e).execute();
         }
 
         // assert

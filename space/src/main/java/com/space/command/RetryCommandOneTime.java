@@ -1,12 +1,16 @@
 package com.space.command;
 
-import com.space.exception.exception.OneTimeRepeatICommandException;
-
 public class RetryCommandOneTime implements ICommand {
 
     private ICommand iCommand;
+    private final LogExceptionCommand logExceptionCommand ;
 
-    public RetryCommandOneTime() {
+    public RetryCommandOneTime(LogExceptionCommand logExceptionCommand) {
+        this.logExceptionCommand = logExceptionCommand;
+    }
+
+    public LogExceptionCommand getLogExceptionCommand() {
+        return logExceptionCommand;
     }
 
     public void setCommand(ICommand command) {
@@ -18,7 +22,7 @@ public class RetryCommandOneTime implements ICommand {
         try {
             iCommand.execute();
         } catch (Exception e) {
-            throw new OneTimeRepeatICommandException(e.getMessage());
+            logExceptionCommand.execute();
         }
     }
 
