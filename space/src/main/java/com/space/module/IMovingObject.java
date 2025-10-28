@@ -6,5 +6,6 @@ public interface IMovingObject {
     Vector getVelocity();
     void setPosition(Point newValue);
     boolean isStatic();
+    void setStatic(boolean isStatic);
 
 }
