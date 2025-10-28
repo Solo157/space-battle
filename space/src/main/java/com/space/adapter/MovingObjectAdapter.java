@@ -1,4 +1,6 @@
-package com.space.module;
+package com.space.adapter;
+
+import com.space.entity.*;
 
 public class MovingObjectAdapter implements IMovingObject {
 
@@ -31,11 +33,6 @@ public class MovingObjectAdapter implements IMovingObject {
         }
 
         return isStatic;
-    }
-
-    @Override
-    public void setStatic(boolean isStatic) {
-        this.object.setProperty("static", isStatic);
     }
 
 }

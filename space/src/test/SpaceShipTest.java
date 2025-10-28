@@ -1,9 +1,10 @@
+import com.space.adapter.MovingObjectAdapter;
 import com.space.command.*;
 import com.space.exception.exception.StaticObjectException;
 import com.space.exception.hendler.ExceptionHandler;
 import com.space.exception.hendler.MoveNullPointerExceptionHandler;
 import com.space.exception.hendler.MoveStaticObjectExceptionHandler;
-import com.space.module.*;
+import com.space.entity.*;
 import org.junit.Test;
 import org.mockito.Mockito;
 
@@ -28,8 +29,8 @@ public class SpaceShipTest {
         MovingObjectAdapter movingObjectAdapter = new MovingObjectAdapter(spaceShip);
 
         // do
-        Move move = new Move(movingObjectAdapter);
-        move.execute();
+        MoveCommand moveCommand = new MoveCommand(movingObjectAdapter);
+        moveCommand.execute();
 
         // assert
         Point location = (Point) spaceShip.getProperty("location");
@@ -49,8 +50,8 @@ public class SpaceShipTest {
         MovingObjectAdapter movingObjectAdapter = new MovingObjectAdapter(spaceShip);
 
         // do
-        Move move = new Move(movingObjectAdapter);
-        assertThrows(RuntimeException.class, move::execute);
+        MoveCommand moveCommand = new MoveCommand(movingObjectAdapter);
+        assertThrows(RuntimeException.class, moveCommand::execute);
     }
 
     /**
@@ -65,8 +66,8 @@ public class SpaceShipTest {
         MovingObjectAdapter movingObjectAdapter = new MovingObjectAdapter(spaceShip);
 
         // do
-        Move move = new Move(movingObjectAdapter);
-        assertThrows(RuntimeException.class, move::execute);
+        MoveCommand moveCommand = new MoveCommand(movingObjectAdapter);
+        assertThrows(RuntimeException.class, moveCommand::execute);
     }
 
     /**
@@ -83,8 +84,8 @@ public class SpaceShipTest {
         MovingObjectAdapter movingObjectAdapter = new MovingObjectAdapter(spaceShip);
 
         // do
-        Move move = new Move(movingObjectAdapter);
-        assertThrows(RuntimeException.class, move::execute);
+        MoveCommand moveCommand = new MoveCommand(movingObjectAdapter);
+        assertThrows(RuntimeException.class, moveCommand::execute);
     }
 
     /**
@@ -98,14 +99,14 @@ public class SpaceShipTest {
         MoveNullPointerExceptionHandler moveNullPointerExceptionHandler = new MoveNullPointerExceptionHandler(retryCommandOneTime);
 
         ExceptionHandler.register(
-                Move.class.toString(),
+                MoveCommand.class.toString(),
                 NullPointerException.class.toString(),
                 moveNullPointerExceptionHandler);
 
         MovingObjectAdapter movingObjectAdapter = new MovingObjectAdapter(null);
 
         // do
-        ICommand move = Mockito.spy(new Move(movingObjectAdapter));
+        ICommand move = Mockito.spy(new MoveCommand(movingObjectAdapter));
         try {
             move.execute();
         } catch (Exception e) {
@@ -129,7 +130,7 @@ public class SpaceShipTest {
         MoveStaticObjectExceptionHandler moveStaticObjectExceptionHandler = new MoveStaticObjectExceptionHandler(retryCommandTwoTime);
 
         ExceptionHandler.register(
-                Move.class.toString(),
+                MoveCommand.class.toString(),
                 StaticObjectException.class.toString(),
                 moveStaticObjectExceptionHandler);
 
@@ -138,7 +139,7 @@ public class SpaceShipTest {
         MovingObjectAdapter movingObjectAdapter = new MovingObjectAdapter(spaceShip);
 
         // do
-        ICommand move = Mockito.spy(new Move(movingObjectAdapter));
+        ICommand move = Mockito.spy(new MoveCommand(movingObjectAdapter));
         try {
             move.execute();
         } catch (Exception e) {

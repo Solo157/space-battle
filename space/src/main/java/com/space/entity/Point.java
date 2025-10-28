@@ -1,4 +1,4 @@
-package com.space.module;
+package com.space.entity;
 
 public class Point {
 
