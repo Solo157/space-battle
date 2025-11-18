@@ -74,6 +74,10 @@ public class ScopeTest {
         dispose();
     }
 
+    /**
+     * Тест, проверяющий, что в IoC контейнере может быть одна зависимость, но в зависимости от текущего установленного
+     * скоупа реализация этой зависимости будет разная.
+     */
     @Test
     public void SeparateScopes_ShouldMaintainIndependentRegistrations() {
         setUp();
@@ -96,6 +100,10 @@ public class ScopeTest {
         dispose();
     }
 
+    /**
+     * Тест, проверяющий использование одного скоупа разными потоками. Убеждаемся, что хоть скоуп один, для каждого
+     * потока он будет разным.
+     */
     @Test
     public void ConcurrentScopeRegistrations_ShouldMaintainIsolation() {
         setUp();
