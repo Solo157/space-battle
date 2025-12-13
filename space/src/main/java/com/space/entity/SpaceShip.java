@@ -1,4 +1,4 @@
-package com.space.module;
+package com.space.entity;
 
 import java.util.*;
 

@@ -1,4 +1,7 @@
-package com.space.module;
+package com.space.adapter;
+
+import com.space.entity.Point;
+import com.space.entity.Vector;
 
 public interface IMovingObject {
 
@@ -6,6 +9,5 @@ public interface IMovingObject {
     Vector getVelocity();
     void setPosition(Point newValue);
     boolean isStatic();
-    void setStatic(boolean isStatic);
 
 }

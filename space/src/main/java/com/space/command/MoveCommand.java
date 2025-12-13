@@ -1,13 +1,14 @@
-package com.space.module;
+package com.space.command;
 
 import com.space.exception.exception.StaticObjectException;
-import com.space.command.ICommand;
+import com.space.adapter.IMovingObject;
+import com.space.entity.Vector;
 
-public class Move implements ICommand {
+public class MoveCommand implements ICommand {
 
     private final IMovingObject object;
 
-    public Move(IMovingObject object) {
+    public MoveCommand(IMovingObject object) {
         this.object = object;
     }
 
