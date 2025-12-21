@@ -1,3 +1,5 @@
+package com.space;
+
 import com.space.command.CheckFuelCommand;
 import com.space.exception.exception.CommandException;
 import com.space.adapter.CheckFuelObjectAdapter;

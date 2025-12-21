@@ -1,6 +1,8 @@
 package com.space.adapter;
 
-import com.space.entity.*;
+import com.space.entity.Point;
+import com.space.entity.UObject;
+import com.space.entity.Vector;
 
 public class MovingObjectAdapter implements IMovingObject {
 
@@ -26,7 +28,7 @@ public class MovingObjectAdapter implements IMovingObject {
     }
 
     @Override
-    public boolean isStatic() {
+    public Boolean isStatic() {
         Boolean isStatic = (Boolean) object.getProperty("static");
         if (isStatic == null) {
             return false;

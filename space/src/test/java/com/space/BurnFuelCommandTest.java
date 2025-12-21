@@ -1,3 +1,5 @@
+package com.space;
+
 import com.space.command.BurnFuelCommand;
 import com.space.adapter.BurnFuelObjectAdapter;
 import com.space.entity.SpaceShip;

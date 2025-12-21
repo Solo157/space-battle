@@ -8,6 +8,6 @@ public interface IMovingObject {
     Point getLocation();
     Vector getVelocity();
     void setPosition(Point newValue);
-    boolean isStatic();
+    Boolean isStatic();
 
 }
