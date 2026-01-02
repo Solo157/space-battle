@@ -1,3 +1,5 @@
+package com.space;
+
 import com.space.adapter.BurnFuelObjectAdapter;
 import com.space.adapter.CheckFuelObjectAdapter;
 import com.space.adapter.MovingObjectAdapter;

@@ -1,3 +1,5 @@
+package com.space;
+
 import com.space.adapter.MovingObjectAdapter;
 import com.space.command.*;
 import com.space.exception.exception.StaticObjectException;

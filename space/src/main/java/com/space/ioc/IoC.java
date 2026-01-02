@@ -8,22 +8,11 @@ import java.util.function.Function;
 public class IoC {
 
     public static BiFunction<String, Object[], Object> strategy = (String dependency, Object[] args) -> {
-        if ("Update Ioc Resolve Dependency Strategy".equals(dependency))
-        {
-
-//            Function<BiFunction<String, Object[], Object>, BiFunction<String, Object[], Object>> objectObjectFunction = (obh) -> {
-//                return (BiFunction<String, Object[], Object>) args[0];
-//            };
-
-            return new UpdateIocResolveDependencyStrategyCommand(
-//                    objectObjectFunction
-                    (BiFunction<String, Object[], Object>) args[0]
-            );
+        if ("Update Ioc Resolve Dependency Strategy".equals(dependency)) {
+            return new UpdateIocResolveDependencyStrategyCommand((BiFunction<String, Object[], Object>) args[0]);
         }
-        else
-        {
-            throw new IllegalArgumentException("Dependency {dependency} is not found.");
-        }
+
+        throw new IllegalArgumentException("Dependency {dependency} is not found.");
     };
 
     @SuppressWarnings("unchecked")

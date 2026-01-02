@@ -1,3 +1,5 @@
+package com.space;
+
 import com.space.command.ICommand;
 import com.space.command.UpdateIocResolveDependencyStrategyCommand;
 import com.space.ioc.IoC;
@@ -5,6 +7,7 @@ import org.junit.Test;
 
 import java.util.function.BiFunction;
 
+import static com.space.ScopeUtils.*;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -13,6 +16,8 @@ public class IocTest {
 
     @Test
     public void IocShouldUpdateResolveDependencyStrategy() {
+        setDefaultStrategy();
+
         final Boolean[] wasCalled = {false};
 
         IoC.<ICommand>resolve("Update Ioc Resolve Dependency Strategy",
@@ -28,6 +33,8 @@ public class IocTest {
 
     @Test
     public void IocShouldThrowInvalidCastExceptionIfDependencyResolvesAnotherType() {
+        setDefaultStrategy();
+
         assertThrows(ClassCastException.class, () -> {
             String strategy = IoC.resolve(
                     "Update Ioc Resolve Dependency Strategy",

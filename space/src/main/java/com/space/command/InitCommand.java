@@ -2,7 +2,7 @@ package com.space.command;
 
 import com.space.ioc.IoC;
 
-import java.util.*;
+import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.function.BiFunction;
@@ -10,9 +10,9 @@ import java.util.function.Function;
 
 public class InitCommand implements ICommand {
 
-    static ThreadLocal<Object> currentScopes = new ThreadLocal<>();
-    static final ConcurrentMap<String, Function<Object[], Object>> rootScope = new ConcurrentHashMap<>();
-    static boolean alreadyExecutesSuccessfully = false;
+    public static ThreadLocal<Object> currentScopes = new ThreadLocal<>();
+    public final static ConcurrentMap<String, Function<Object[], Object>> rootScope = new ConcurrentHashMap<>();
+    public static boolean alreadyExecutesSuccessfully = false;
 
     @Override
     public void execute() {
