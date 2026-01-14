@@ -1,12 +1,10 @@
 package com.space.serverthread;
 
 import com.space.command.ICommand;
-import com.space.command.InitCommand;
 import com.space.event.ManualResetEvent;
 import com.space.ioc.IoC;
 
 import java.util.concurrent.BlockingQueue;
-import java.util.function.Function;
 
 public class ServerThread {
     public final BlockingQueue<ICommand> queue;
@@ -55,14 +53,7 @@ public class ServerThread {
      * Проинициализировать скоуп IoC для потока, выполняющего команды.
      */
     private void setUpIoCScope() {
-        new InitCommand().execute();
-        var iocScope = IoC.<Object>resolve("IoC.Scope.Create");
-        IoC.<ICommand>resolve("IoC.Scope.Current.Set", iocScope).execute();
-
-        IoC.<ICommand>resolve("IoC.Register", "ExceptionHandler", (Function<Object[], Object>) (args) -> {
-            System.out.println("Throw exception in command");
-            return (Object) args[0];
-        }).execute();
+        ServerThreadIoCDependencyRegistrator.registerDependency(queue);
     }
 
     public void start() {
@@ -71,6 +62,10 @@ public class ServerThread {
 
     public void stop() {
         stop = true;
+    }
+
+    public ManualResetEvent getEvent() {
+        return this.event;
     }
 
     public void setEvent(ManualResetEvent event) {
