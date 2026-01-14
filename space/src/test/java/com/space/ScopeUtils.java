@@ -12,21 +12,21 @@ public class ScopeUtils {
     }
 
     public static void setUp() {
-        reset();
+//        reset();
 
         new InitCommand().execute();
         var iocScope = IoC.<Object>resolve("IoC.Scope.Create");
         IoC.<ICommand>resolve("IoC.Scope.Current.Set", iocScope).execute();
     }
 
-    /**
-     * Сброс всех скоупов.
-     */
-    public static void reset() {
-        InitCommand.currentScopes = new ThreadLocal<>();
-        InitCommand.rootScope.clear();
-        InitCommand.alreadyExecutesSuccessfully = false;
-    }
+//    /**
+//     * Сброс всех скоупов.
+//     */
+//    public static void reset() {
+//        InitCommand.currentScopes = new ThreadLocal<>();
+//        InitCommand.rootScope.clear();
+//        InitCommand.alreadyExecutesSuccessfully = false;
+//    }
 
     /**
      * Установить дефолтную стратегию. Используется только для тестов.

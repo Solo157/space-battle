@@ -10,7 +10,6 @@ import org.junit.jupiter.api.Test;
 
 import java.util.function.Function;
 
-import static com.space.ScopeUtils.setUp;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class IMovingObjectAdapterDynamicGenerationTest {
@@ -20,7 +19,7 @@ public class IMovingObjectAdapterDynamicGenerationTest {
      */
     @Test
     public void IMovingObjectAdapterCreation_successfully() {
-        setUp();
+//        setUp();
 
         IMovingObjectGenerateAdapterService adapterService = new IMovingObjectGenerateAdapterService();
         IoC.<ICommand>resolve("IoC.Register", "IMovingObjectAdapter",
