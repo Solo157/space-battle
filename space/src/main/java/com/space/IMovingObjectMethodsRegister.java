@@ -27,6 +27,15 @@ public class IMovingObjectMethodsRegister {
                         (Function<Object[], Object>) (args) -> (Object) ((UObject)args[0]).getProperty("velocity")).execute();
             }
 
+            if (method.getName().equals("setVelocity")) {
+                IoC.<ICommand>resolve("IoC.Register", "IMovingObject.Velocity.set",
+                        (Function<Object[], Object>) (args) -> {
+                            ((UObject)args[0]).setProperty("velocity", args[1]);
+                            return new EmptyCommand();
+                        }
+                ).execute();
+            }
+
             if (method.getName().equals("setPosition")) {
                 IoC.<ICommand>resolve("IoC.Register", "IMovingObject.Position.set",
                         (Function<Object[], Object>) (args) -> {

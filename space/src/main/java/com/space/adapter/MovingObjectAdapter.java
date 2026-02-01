@@ -23,6 +23,11 @@ public class MovingObjectAdapter implements IMovingObject {
     }
 
     @Override
+    public void setVelocity(Vector newValue) {
+        object.setProperty("velocity", newValue);
+    }
+
+    @Override
     public void setPosition(Point newValue) {
         object.setProperty("location", newValue);
     }

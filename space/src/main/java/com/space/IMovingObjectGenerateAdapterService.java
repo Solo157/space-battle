@@ -20,9 +20,9 @@ public class IMovingObjectGenerateAdapterService {
     public Object getAdapter(Object obj) {
         synchronized (this) {
 
-            if (adapter != null) {
-                return adapter;
-            }
+//            if (adapter != null) {
+//                return adapter;
+//            }
 
             InvocationHandler handler = new InvocationHandler() {
 
@@ -35,6 +35,8 @@ public class IMovingObjectGenerateAdapterService {
                         case "getVelocity" -> {
                             return IoC.<Vector>resolve("IMovingObject.Velocity", obj);
                         }
+                        case "setVelocity" ->
+                                IoC.<ICommand>resolve("IMovingObject.Velocity.set", obj, args[0]).execute();
                         case "setPosition" ->
                                 IoC.<ICommand>resolve("IMovingObject.Position.set", obj, args[0]).execute();
                         case "isStatic" -> {
