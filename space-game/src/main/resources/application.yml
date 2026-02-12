@@ -1,0 +1,14 @@
+server:
+  port: 8075
+
+spring-doc:
+  swagger-ui.path: /
+
+otus:
+  auth:
+    public: "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAy6DBWNxKXVNxhjq4vuIJuhIxcHryUONFz5YK06IPdqEBbOUZjy1DitygiAuzqNW/rKHnUxU1NgwR1sz+yDXBrc9ox1B4udYdgDMqQE3W9QAXg8i4MOhNR4uJnYifWH4tz02E533AI+BXPn0EHc9FBbUxOfIONC9ij0u727msEsl9tupGCZhUNTZxC7G4drfjtGmNLqYL5cdNVjYrol6Vhcl8hZVMx3FivAUBR+ImOeqQ+4G9bkCfT2M6hkWhijEUso6F1famU9doVuc5pcfWn/oSgMNOaZzWPZabKJJ8VW9djcMSH7pEVqplYAP/kq0hTf0c6ZNMS4SY8XnvOgmC4QIDAQAB"
+
+logging:
+  level:
+    org.springframework.web: DEBUG
+    org.springframework.http.client: DEBUG
