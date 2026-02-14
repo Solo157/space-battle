@@ -4,14 +4,14 @@ import com.space.serverthread.ServerThread;
 
 public class HardStopCommand implements ICommand {
 
-    private final ServerThread st;
+    private final ServerThread serverThread;
 
     public HardStopCommand(ServerThread serverThread) {
-        this.st = serverThread;
+        this.serverThread = serverThread;
     }
 
     @Override
     public void execute() {
-        st.stop();
+        serverThread.setCurrentState(null);
     }
 }
