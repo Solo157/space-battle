@@ -6,8 +6,10 @@ import com.space.adapter.IMovingObject;
 import com.space.command.*;
 import com.space.entity.UObject;
 import com.space.entity.Vector;
+import com.space.handler.SystemHandlerHandler;
 import com.space.ioc.IoC;
 import com.space.service.CommandType;
+import com.space.service.NeighbourhoodSystemService;
 import com.space.service.SpaceBattleCrudService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -15,14 +17,20 @@ import org.springframework.stereotype.Component;
 import java.util.concurrent.BlockingQueue;
 import java.util.function.Function;
 
+/**
+ * Регистратор зависимостей для игры, для игрового сервера.
+ */
 @Component
 public class ServerThreadIoCDependencyRegistrator {
 
     private static SpaceBattleCrudService crudService;
+    private static NeighbourhoodSystemService systemService;
 
     @Autowired
-    public ServerThreadIoCDependencyRegistrator(SpaceBattleCrudService spaceBattleCrudService) {
+    public ServerThreadIoCDependencyRegistrator(SpaceBattleCrudService spaceBattleCrudService,
+                                                NeighbourhoodSystemService neighbourhoodSystemService) {
         crudService = spaceBattleCrudService;
+        systemService = neighbourhoodSystemService;
     }
 
     /**
@@ -38,6 +46,7 @@ public class ServerThreadIoCDependencyRegistrator {
         registerMoveCommand();
         registerPrintCommand();
         registerCommandQueue(queue);
+        registerUpdateAndCheckCollisionCommand();
     }
 
     private static void registerCommandQueue(BlockingQueue<ICommand> queue) {
@@ -45,6 +54,19 @@ public class ServerThreadIoCDependencyRegistrator {
             ICommand iCommand = (ICommand) args[0];
             queue.add(iCommand);
             return new EmptyCommand();
+        }).execute();
+    }
+
+    /**
+     * Регистрация команды по обновлению макрокоманды для проверки коллизий для объекта.
+     */
+    private static void registerUpdateAndCheckCollisionCommand() {
+        IoC.<ICommand>resolve("IoC.Register", CommandType.UPDATE_AND_CHECK_COLLISION_COMMAND.name(), (Function<Object[], Object>) (args) -> {
+            UObject object = (UObject) args[0];
+            String gameId = (String) args[1];
+            SystemHandlerHandler systemHandlerHandler = systemService.getCollisionHandlers(gameId);
+
+            return new UpdateAndCheckCollisionCommand(object, systemHandlerHandler);
         }).execute();
     }
 

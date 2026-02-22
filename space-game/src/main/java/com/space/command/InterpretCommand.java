@@ -39,7 +39,7 @@ public class InterpretCommand implements ICommand {
         applyArgsParametersToObject(uObject, args);
         validateCommandId(commandId);
 
-        var cmd = IoC.<ICommand>resolve(commandId, uObject);
+        var cmd = IoC.<ICommand>resolve(commandId, uObject, gameId);
         IoC.<ICommand>resolve("CommandQueue", cmd).execute();
     }
 

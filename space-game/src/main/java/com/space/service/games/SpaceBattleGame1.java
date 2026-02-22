@@ -3,6 +3,7 @@ package com.space.service.games;
 import com.space.command.ICommand;
 import com.space.event.ManualResetEvent;
 import com.space.serverthread.ServerThread;
+import com.space.service.NeighbourhoodSystemService;
 import org.springframework.stereotype.Component;
 
 import java.util.*;

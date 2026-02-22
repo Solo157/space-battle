@@ -5,7 +5,17 @@ package com.space.service;
  */
 public enum CommandType {
 
+    /**
+     * Просто вывод сообщения в консоль.
+     */
     PRINT_COMMAND,
-    MOVE_COMMAND;
+    /**
+     * Команда, чтобы сдвинуть объект.
+     */
+    MOVE_COMMAND,
+    /**
+     * Команда для обновления макрокоманды по коллизиям для объекта, после его движения.
+      */
+    UPDATE_AND_CHECK_COLLISION_COMMAND;
 
 }
