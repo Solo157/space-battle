@@ -18,8 +18,9 @@ public class SpaceBattleGame1 implements SpaceBattleGame {
     private final ServerThread serverThread;
 
     public SpaceBattleGame1() {
-        BlockingQueue<ICommand> q = new ArrayBlockingQueue<>(100);
-        this.serverThread = new ServerThread(q);
+        BlockingQueue<ICommand> queue = new ArrayBlockingQueue<>(100);
+        BlockingQueue<ICommand> moveQueue = new ArrayBlockingQueue<>(100);
+        this.serverThread = new ServerThread(queue, moveQueue);
         var event = new ManualResetEvent();
         this.serverThread.setEvent(event);
 

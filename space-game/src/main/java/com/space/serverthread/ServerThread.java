@@ -1,47 +1,44 @@
 package com.space.serverthread;
 
 import com.space.command.ICommand;
+import com.space.command.states.State;
+import com.space.command.states.UsualState;
 import com.space.event.ManualResetEvent;
-import com.space.ioc.IoC;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.concurrent.BlockingQueue;
 
 public class ServerThread {
+
     public final BlockingQueue<ICommand> queue;
+    public final BlockingQueue<ICommand> moveQueue;
+
     public Runnable behaviour;
     public Thread thread;
     private boolean stop = false;
+    @Getter
+    @Setter
     private ManualResetEvent event;
 
-    public ServerThread(BlockingQueue<ICommand> q) {
-        queue = q;
+    @Getter
+    @Setter
+    private State currentState;
 
-        behaviour = () -> {
-            // если очередь пустая, то вызывающий поток можно отпустить.
-            if (queue.isEmpty()) {
-                actionAfterStop();
-            }
-
-            ICommand cmd = null;
-            try {
-                cmd = queue.take();
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
-            }
-
-            try {
-                cmd.execute();
-            } catch (Exception e) {
-                IoC.<String>resolve("ExceptionHandler", e);
-            }
-        };
+    public ServerThread(BlockingQueue<ICommand> q, BlockingQueue<ICommand> moveQ) {
+        this.queue = q;
+        this.moveQueue = moveQ;
+        currentState = new UsualState(this);
 
         thread = new Thread(
                 () -> {
                     setUpIoCScope();
 
                     while (!stop) {
-                        behaviour.run();
+                        State nextState = currentState.handle();
+                        if (nextState == null) {
+                            break;
+                        }
                     }
 
                     actionAfterStop();
@@ -62,14 +59,6 @@ public class ServerThread {
 
     public void stop() {
         stop = true;
-    }
-
-    public ManualResetEvent getEvent() {
-        return this.event;
-    }
-
-    public void setEvent(ManualResetEvent event) {
-        this.event = event;
     }
 
     public void actionAfterStop() {
@@ -93,3 +82,9 @@ public class ServerThread {
     }
 
 }
+// имеем очередь queu в ней просто выполняются команды, затем отправляем в нее MoveToCommand с ее помощью устанавливаем
+// новый контекст MoveToState при котором все последующие команды они будут не выполняться, а просто складываться в другю очередь
+// как только прилетела команда RunCommand, то она переключает контекст на RunState и очередь queu продолжает выполнять команды
+// прикол в том, что все это обрабатывает один тред и когда надо он выполняет команды, а когда надо сохраняет их в другой очереди
+// поэтому используя команды можно выполнять команды или их сохранять
+// по сути надо менять behavior

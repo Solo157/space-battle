@@ -3,7 +3,6 @@ package com.space.service.games;
 import com.space.command.ICommand;
 import com.space.event.ManualResetEvent;
 import com.space.serverthread.ServerThread;
-import org.springframework.stereotype.Component;
 
 import java.util.*;
 import java.util.concurrent.ArrayBlockingQueue;
@@ -19,8 +18,9 @@ public class CustomSpaceBattleGame implements SpaceBattleGame {
     private final String gameId;
 
     public CustomSpaceBattleGame(List<Integer> users, String gameId) {
-        BlockingQueue<ICommand> q = new ArrayBlockingQueue<>(100);
-        this.serverThread = new ServerThread(q);
+        BlockingQueue<ICommand> queue = new ArrayBlockingQueue<>(100);
+        BlockingQueue<ICommand> moveQueue = new ArrayBlockingQueue<>(100);
+        this.serverThread = new ServerThread(queue, moveQueue);
         var event = new ManualResetEvent();
         this.serverThread.setEvent(event);
         this.users.addAll(users);
