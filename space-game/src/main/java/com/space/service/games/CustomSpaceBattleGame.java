@@ -3,6 +3,7 @@ package com.space.service.games;
 import com.space.command.ICommand;
 import com.space.event.ManualResetEvent;
 import com.space.serverthread.ServerThread;
+import com.space.service.NeighbourhoodSystemService;
 
 import java.util.*;
 import java.util.concurrent.ArrayBlockingQueue;
@@ -13,8 +14,17 @@ import java.util.concurrent.BlockingQueue;
  */
 public class CustomSpaceBattleGame implements SpaceBattleGame {
 
+    /**
+     * Пользователи игры.
+     */
     private final List<Integer> users = new ArrayList<>();
+    /**
+     * Сервер игры, где выполняются команды в очереди.
+     */
     private final ServerThread serverThread;
+    /**
+     * Идентификатор игры.
+     */
     private final String gameId;
 
     public CustomSpaceBattleGame(List<Integer> users, String gameId) {

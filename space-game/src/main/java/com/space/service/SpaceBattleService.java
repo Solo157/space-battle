@@ -23,12 +23,16 @@ import java.util.stream.Collectors;
 public class SpaceBattleService {
 
     private final SpaceBattleCrudService spaceBattleCrudService;
+    private final NeighbourhoodSystemService neighbourhoodSystemService;
 
     private Map<String, SpaceBattleGame> gamesMap = new HashMap<>();
 
     @Autowired
-    public SpaceBattleService(SpaceBattleCrudService spaceBattleCrudService, List<SpaceBattleGame> spaceBattleGames) {
+    public SpaceBattleService(SpaceBattleCrudService spaceBattleCrudService,
+                              NeighbourhoodSystemService neighbourhoodSystemService,
+                              List<SpaceBattleGame> spaceBattleGames) {
         this.spaceBattleCrudService = spaceBattleCrudService;
+        this.neighbourhoodSystemService = neighbourhoodSystemService;
         this.gamesMap = spaceBattleGames.stream()
                 .collect(Collectors.toMap(
                         SpaceBattleGame::getGameId,
@@ -57,11 +61,13 @@ public class SpaceBattleService {
         game.waitOne();
     }
 
-    public String createGame(List<Integer> users, String gameId) {
+    /**
+     * Создать игру. Также и создается система окрестностей для игры.
+     */
+    public void createGame(List<Integer> users, String gameId) {
         CustomSpaceBattleGame customSpaceBattleGame = new CustomSpaceBattleGame(users, gameId);
         gamesMap.put(gameId, customSpaceBattleGame);
-
-        return gameId;
+        neighbourhoodSystemService.createSystem(gameId);
     }
 
 }
