@@ -14,8 +14,12 @@ public enum CommandType {
      */
     MOVE_COMMAND,
     /**
+     * Макро команда для движения.
+     */
+    START_MOVE,
+    /**
      * Команда для обновления макрокоманды по коллизиям для объекта, после его движения.
       */
-    UPDATE_AND_CHECK_COLLISION_COMMAND;
+    UPDATE_AND_CHECK_COLLISION_COMMAND,
 
 }

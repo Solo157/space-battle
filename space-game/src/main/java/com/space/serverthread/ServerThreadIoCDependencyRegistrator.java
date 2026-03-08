@@ -2,7 +2,7 @@ package com.space.serverthread;
 
 import com.space.IMovingObjectGenerateAdapterService;
 import com.space.IMovingObjectMethodsRegister;
-import com.space.adapter.IMovingObject;
+import com.space.adapter.*;
 import com.space.command.*;
 import com.space.entity.UObject;
 import com.space.entity.Vector;
@@ -14,11 +14,14 @@ import com.space.service.SpaceBattleCrudService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.*;
 import java.util.concurrent.BlockingQueue;
 import java.util.function.Function;
 
 /**
  * Регистратор зависимостей для игры, для игрового сервера.
+ * Регистрирует зависимости для конкретной игры, а также предоставляет зарегистировать зависимости для конкретного скоупа
+ * игрока.
  */
 @Component
 public class ServerThreadIoCDependencyRegistrator {
@@ -44,6 +47,7 @@ public class ServerThreadIoCDependencyRegistrator {
         registerGameObjects();
         registerSetVelocityMethod();
         registerMoveCommand();
+        registerStartMoveCommand();
         registerPrintCommand();
         registerCommandQueue(queue);
         registerUpdateAndCheckCollisionCommand();
@@ -84,6 +88,23 @@ public class ServerThreadIoCDependencyRegistrator {
         }).execute();
     }
 
+    public static void registerStartMoveCommand() {
+        IoC.<ICommand>resolve("IoC.Register", CommandType.START_MOVE.name(), (Function<Object[], Object>) (args) -> {
+            String objectId = (String) args[0];
+
+            UObject spaceBattleObject = crudService.findSpaceBattleObject(objectId);
+
+            MovingObjectAdapter movingObjectAdapter = new MovingObjectAdapter(spaceBattleObject);
+            CheckFuelObjectAdapter checkFuelObjectAdapter = new CheckFuelObjectAdapter(spaceBattleObject);
+            BurnFuelObjectAdapter burnFuelObjectAdapter = new BurnFuelObjectAdapter(spaceBattleObject);
+
+            CheckFuelCommand checkFuelCommand = new CheckFuelCommand(checkFuelObjectAdapter);
+            BurnFuelCommand burnFuelCommand = new BurnFuelCommand(burnFuelObjectAdapter);
+            MoveCommand moveCommand = new MoveCommand(movingObjectAdapter);
+            return new MoveMacroCommand(List.of(checkFuelCommand, moveCommand, burnFuelCommand));
+        }).execute();
+    }
+
     private static void registerSetVelocityMethod() {
         IoC.<ICommand>resolve("IoC.Register", "SetVelocity", (Function<Object[], Object>) (args) -> {
             UObject object = (UObject) args[0];
@@ -106,6 +127,19 @@ public class ServerThreadIoCDependencyRegistrator {
             UObject spaceBattleObject = crudService.findSpaceBattleObject(objectId);
             return (Object) spaceBattleObject;
         }).execute();
+    }
+
+    /**
+     * Регистрируются переданные идентификаторы объектов в IoC для скоупа конкретного юзера.
+     */
+    public void registerGameObjectId(String userId) {
+        List<String> allObjectIds = crudService.findAllObjectIds(userId);
+
+        for (String objectId : allObjectIds) {
+            IoC.<ICommand>resolve("IoC.Register", objectId, (Function<Object[], Object>) (args) -> {
+                return (Object) new EmptyCommand();
+            }).execute();
+        }
     }
 
     private static void registerIMovingObjectAdapter() {

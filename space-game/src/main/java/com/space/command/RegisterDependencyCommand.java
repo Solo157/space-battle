@@ -5,6 +5,10 @@ import com.space.ioc.IoC;
 import java.util.*;
 import java.util.function.Function;
 
+/**
+ * Команда для регистрации зависимости и ее стратегии в IoC. Т.е. в текущий currentScope устанавливается новая зависимость
+ * или заменяется уже существующая.
+ */
 public class RegisterDependencyCommand implements ICommand {
 
     private String dependency;
