@@ -3,7 +3,6 @@ package com.space.service.games;
 import com.space.command.ICommand;
 import com.space.event.ManualResetEvent;
 import com.space.serverthread.ServerThread;
-import com.space.service.NeighbourhoodSystemService;
 
 import java.util.*;
 import java.util.concurrent.ArrayBlockingQueue;
@@ -31,7 +30,7 @@ public class CustomSpaceBattleGame implements SpaceBattleGame {
         BlockingQueue<ICommand> queue = new ArrayBlockingQueue<>(100);
         BlockingQueue<ICommand> moveQueue = new ArrayBlockingQueue<>(100);
         this.serverThread = new ServerThread(queue, moveQueue);
-        var event = new ManualResetEvent();
+        ManualResetEvent event = new ManualResetEvent();
         this.serverThread.setEvent(event);
         this.users.addAll(users);
         this.gameId = gameId;

@@ -1,5 +1,8 @@
 package com.space.command;
 
+/**
+ * Команда для установки нового скоупа, как текущего скоупа для потока, который работает с этим текущим скоупом.
+ */
 public class SetCurrentScopeCommand implements ICommand {
 
     private Object scope;

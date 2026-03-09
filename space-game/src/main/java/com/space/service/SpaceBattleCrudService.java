@@ -1,9 +1,7 @@
 package com.space.service;
 
 import com.space.command.CollisionMacroCommand;
-import com.space.entity.Point;
-import com.space.entity.SpaceShip;
-import com.space.entity.UObject;
+import com.space.entity.*;
 import com.space.entity.Vector;
 import lombok.Data;
 import org.springframework.stereotype.Service;
@@ -24,6 +22,15 @@ public class SpaceBattleCrudService {
     private static SpaceShip spaceShip5;
     private static SpaceShip spaceShip6;
     private static SpaceShip spaceShip7;
+    private static SpaceShip spaceShip8;
+
+    /**
+     * Найти все идентификаторы объектов которыми игрок может управлять. Т.к. полноценного CRUD нет, то он возвращает
+     * замоканный список.
+     */
+    public List<String> findAllObjectIds(String userId) {
+        return List.of("objectId8");
+    }
 
     public UObject findSpaceBattleObject(String objectId) {
         if (objectId.equals("objectId1")) {
@@ -145,6 +152,26 @@ public class SpaceBattleCrudService {
             return spaceShip;
         }
 
+        if (objectId.equals("objectId8")) {
+            if (spaceShip8 != null) {
+                return spaceShip8;
+            }
+
+            SpaceShip spaceShip = new SpaceShip();
+            spaceShip.setProperty("id", "objectId8");
+            spaceShip.setProperty("owner", "545");
+            spaceShip.setProperty("fuel", 2);
+            spaceShip.setProperty("velocity", new Vector(-7, 3));
+            spaceShip.setProperty("location", new Point(12, 5));
+            spaceShip.setProperty("fuelFlowRate", 2);
+            spaceShip.setProperty("static", Boolean.FALSE);
+            spaceShip.setProperty("macroCommand", new CollisionMacroCommand(new ArrayList<>()));
+
+            this.spaceShip8 = spaceShip;
+
+            return spaceShip;
+        }
+
         return null;
     }
 
@@ -160,6 +187,7 @@ public class SpaceBattleCrudService {
         spaceShip5 = null;
         spaceShip6 = null;
         spaceShip7 = null;
+        spaceShip8 = null;
     }
 
 }
